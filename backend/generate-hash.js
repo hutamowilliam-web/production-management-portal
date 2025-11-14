@@ -1,0 +1,7 @@
+const bcrypt = require('bcryptjs');
+
+const password = 'password';
+const hash = bcrypt.hashSync(password, 10);
+
+console.log('Password hash for "password":');
+console.log(hash);

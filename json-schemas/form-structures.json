@@ -1,0 +1,388 @@
+{
+  "forms": {
+    "internal_reject": {
+      "name": "Internal Reject Form",
+      "table": "internal_rejects",
+      "fields": [
+        {
+          "name": "sales_order_number",
+          "label": "Sales Order Number",
+          "type": "text",
+          "required": true,
+          "validation": "alphanumeric"
+        },
+        {
+          "name": "department_id",
+          "label": "Department",
+          "type": "select",
+          "required": true,
+          "dataSource": "departments",
+          "displayField": "name",
+          "valueField": "id"
+        },
+        {
+          "name": "production_stage_id",
+          "label": "Production Stage",
+          "type": "select",
+          "required": false,
+          "dataSource": "department_areas",
+          "displayField": "name",
+          "valueField": "id",
+          "dependsOn": "department_id"
+        },
+        {
+          "name": "customer_name",
+          "label": "Customer Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "product",
+          "label": "Product",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "label": "Reason",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "name": "reject_quantity",
+          "label": "Reject Quantity",
+          "type": "number",
+          "required": true,
+          "min": 1
+        },
+        {
+          "name": "details",
+          "label": "Details",
+          "type": "textarea",
+          "required": false
+        },
+        {
+          "name": "total_reject_cost",
+          "label": "Total Reject Cost",
+          "type": "currency",
+          "required": true,
+          "calculation": "reject_quantity * product_cost_per_unit"
+        },
+        {
+          "name": "responsible_employee",
+          "label": "Responsible Employee",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "shift",
+          "label": "Shift",
+          "type": "select",
+          "required": false,
+          "options": ["Day Shift", "Night Shift", "Weekend Shift"]
+        },
+        {
+          "name": "faulty_department_id",
+          "label": "Faulty Department",
+          "type": "select",
+          "required": true,
+          "dataSource": "departments",
+          "displayField": "name",
+          "valueField": "id"
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "required": true,
+          "options": ["Pending", "Stock Received", "No Stock", "Wrong Stock Received"],
+          "default": "Pending"
+        }
+      ]
+    },
+    "customer_return": {
+      "name": "Customer Return Form",
+      "table": "customer_returns",
+      "fields": [
+        {
+          "name": "sales_order_number",
+          "label": "Sales Order Number",
+          "type": "text",
+          "required": true,
+          "validation": "alphanumeric"
+        },
+        {
+          "name": "department_id",
+          "label": "Department",
+          "type": "select",
+          "required": true,
+          "dataSource": "departments",
+          "displayField": "name",
+          "valueField": "id"
+        },
+        {
+          "name": "production_stage",
+          "label": "Production Stage",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "return_date",
+          "label": "Date of Return",
+          "type": "date",
+          "required": true,
+          "default": "today"
+        },
+        {
+          "name": "customer_name",
+          "label": "Customer Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "product",
+          "label": "Product",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "reason",
+          "label": "Reason",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "name": "return_quantity",
+          "label": "Return Quantity",
+          "type": "number",
+          "required": true,
+          "min": 1
+        },
+        {
+          "name": "details",
+          "label": "Details",
+          "type": "textarea",
+          "required": false
+        },
+        {
+          "name": "total_cost_return",
+          "label": "Total Cost Return",
+          "type": "currency",
+          "required": true,
+          "calculation": "return_quantity * product_cost_per_unit"
+        },
+        {
+          "name": "responsible_employee",
+          "label": "Responsible Employee",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "faulty_department_id",
+          "label": "Faulty Department",
+          "type": "select",
+          "required": true,
+          "dataSource": "departments",
+          "displayField": "name",
+          "valueField": "id"
+        },
+        {
+          "name": "raf_date",
+          "label": "RAF Date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "production_status",
+          "label": "Production Status",
+          "type": "select",
+          "required": true,
+          "options": ["credited", "replaced", "credit and replaced"],
+          "default": "credited"
+        },
+        {
+          "name": "date_resolved",
+          "label": "Date Resolved",
+          "type": "date",
+          "required": false
+        }
+      ]
+    },
+    "sop_failure": {
+      "name": "SOP Failure Form",
+      "table": "sop_failures",
+      "fields": [
+        {
+          "name": "department_id",
+          "label": "Department",
+          "type": "select",
+          "required": true,
+          "dataSource": "departments",
+          "displayField": "name",
+          "valueField": "id"
+        },
+        {
+          "name": "area_id",
+          "label": "Area",
+          "type": "select",
+          "required": true,
+          "dataSource": "department_areas",
+          "displayField": "name",
+          "valueField": "id",
+          "dependsOn": "department_id"
+        },
+        {
+          "name": "failure_type",
+          "label": "Failure Type",
+          "type": "select",
+          "required": true,
+          "dataSource": "sop_failures_by_area",
+          "dependsOn": "area_id"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "name": "priority",
+          "label": "Priority",
+          "type": "select",
+          "required": true,
+          "options": ["Low", "Medium", "High", "Critical"],
+          "default": "Medium"
+        },
+        {
+          "name": "notes",
+          "label": "Additional Notes",
+          "type": "textarea",
+          "required": false
+        }
+      ]
+    },
+    "maintenance_ticket": {
+      "name": "Production Machinery Maintenance Ticket",
+      "table": "maintenance_tickets",
+      "fields": [
+        {
+          "name": "machine_name",
+          "label": "Machine Name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "department_id",
+          "label": "Department",
+          "type": "select",
+          "required": true,
+          "dataSource": "departments",
+          "displayField": "name",
+          "valueField": "id"
+        },
+        {
+          "name": "issue_description",
+          "label": "Issue Description",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "name": "priority",
+          "label": "Priority",
+          "type": "select",
+          "required": true,
+          "options": ["Low", "Medium", "High", "Critical"],
+          "default": "Medium"
+        },
+        {
+          "name": "estimated_downtime",
+          "label": "Estimated Downtime (minutes)",
+          "type": "number",
+          "required": false,
+          "min": 0
+        },
+        {
+          "name": "parts_required",
+          "label": "Parts Required",
+          "type": "textarea",
+          "required": false
+        },
+        {
+          "name": "cost",
+          "label": "Estimated Cost",
+          "type": "currency",
+          "required": false,
+          "default": 0
+        }
+      ]
+    },
+    "ncr_report": {
+      "name": "NCR Report Form",
+      "table": "ncr_reports",
+      "fields": [
+        {
+          "name": "sop_failure_id",
+          "label": "Related SOP Failure",
+          "type": "select",
+          "required": true,
+          "dataSource": "sop_failures",
+          "displayField": "description",
+          "valueField": "id"
+        },
+        {
+          "name": "report_content",
+          "label": "Report Content",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "name": "corrective_action",
+          "label": "Corrective Action",
+          "type": "textarea",
+          "required": false
+        },
+        {
+          "name": "preventive_action",
+          "label": "Preventive Action",
+          "type": "textarea",
+          "required": false
+        }
+      ]
+    }
+  },
+  "fieldTypes": {
+    "text": {
+      "component": "input",
+      "inputType": "text"
+    },
+    "textarea": {
+      "component": "textarea"
+    },
+    "number": {
+      "component": "input",
+      "inputType": "number"
+    },
+    "currency": {
+      "component": "input",
+      "inputType": "number",
+      "step": "0.01",
+      "prefix": "R"
+    },
+    "date": {
+      "component": "input",
+      "inputType": "date"
+    },
+    "select": {
+      "component": "select"
+    },
+    "multiselect": {
+      "component": "multiselect"
+    },
+    "checkbox": {
+      "component": "checkbox"
+    },
+    "radio": {
+      "component": "radio"
+    }
+  }
+}
