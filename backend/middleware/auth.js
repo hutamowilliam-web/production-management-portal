@@ -1,5 +1,22 @@
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 const { executeQuery } = require('../config/database');
+
+/**
+ * Validate Microsoft Azure AD token (for Power Apps integration)
+ * @param {string} token - Azure AD access token
+ * @returns {Promise<Object>} Token claims
+ */
+async function validateMicrosoftToken(token) {
+  try {
+    const response = await axios.get('https://graph.microsoft.com/v1.0/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Invalid Microsoft token');
+  }
+}
 
 // Authenticate JWT token
 const authenticateToken = async (req, res, next) => {
@@ -66,5 +83,6 @@ const checkDepartmentAccess = (req, res, next) => {
 module.exports = {
   authenticateToken,
   checkPermission,
-  checkDepartmentAccess
+  checkDepartmentAccess,
+  validateMicrosoftToken
 };

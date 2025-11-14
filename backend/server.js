@@ -19,6 +19,7 @@ const formRoutes = require('./routes/forms');
 const dashboardRoutes = require('./routes/dashboard');
 const reportRoutes = require('./routes/reports');
 const notificationRoutes = require('./routes/notifications');
+const powerAppsRoutes = require('./routes/powerApps');
 
 const { authenticateToken } = require('./middleware/auth');
 const { errorHandler } = require('./middleware/errorHandler');
@@ -48,7 +49,12 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin: [
+    process.env.FRONTEND_URL || "http://localhost:3000",
+    'https://powerapps.microsoft.com',
+    'https://apps.powerapps.com',
+    process.env.POWER_APPS_INSTANCE_URL || 'https://orgc50eefba.crm4.dynamics.com'
+  ],
   credentials: true
 }));
 
@@ -77,6 +83,7 @@ app.use('/api/forms', authenticateToken, formRoutes);
 app.use('/api/dashboard', authenticateToken, dashboardRoutes);
 app.use('/api/reports', authenticateToken, reportRoutes);
 app.use('/api/notifications', authenticateToken, notificationRoutes);
+app.use('/api/power-apps', powerAppsRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
