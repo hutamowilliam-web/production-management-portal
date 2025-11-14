@@ -17,7 +17,7 @@ class PowerAppsService {
   }
 
   /**
-   * Get access token from Azure AD with caching
+   * Get access token - supports multiple authentication methods
    * @returns {Promise<string>} Access token
    */
   async getAccessToken() {
@@ -27,6 +27,78 @@ class PowerAppsService {
         return this.tokenCache.token;
       }
 
+      // Method 1: Using connection string directly (no Azure AD needed)
+      if (process.env.POWER_APPS_CONNECTION_STRING) {
+        return this.getTokenFromConnectionString();
+      }
+
+      // Method 2: Using OAuth 2.0 with Azure AD (optional)
+      if (this.clientId && this.clientSecret && this.tenantId) {
+        return this.getTokenFromAzureAD();
+      }
+
+      // Method 3: Using API key (if configured)
+      if (process.env.POWER_APPS_API_KEY) {
+        this.tokenCache = {
+          token: process.env.POWER_APPS_API_KEY,
+          expiresAt: Date.now() + (86400 * 1000) // 24 hours
+        };
+        return process.env.POWER_APPS_API_KEY;
+      }
+
+      throw new Error('No Power Apps authentication method configured. Set POWER_APPS_CONNECTION_STRING, POWER_APPS_API_KEY, or Azure AD credentials.');
+    } catch (error) {
+      console.error('Failed to get Power Apps access token:', error.response?.data || error.message);
+      throw new Error(`Power Apps authentication failed: ${error.message}`);
+    }
+  }
+
+  /**
+   * Get token from connection string (Direct method - no Azure AD)
+   * @returns {Promise<string>} Token or connection string
+   */
+  async getTokenFromConnectionString() {
+    try {
+      const connectionString = process.env.POWER_APPS_CONNECTION_STRING;
+      
+      // Extract authentication method from connection string
+      if (connectionString.includes('AuthType=OAuth')) {
+        // Connection string with OAuth embedded
+        const match = connectionString.match(/Password=([^;]+)/);
+        if (match) {
+          this.tokenCache = {
+            token: match[1],
+            expiresAt: Date.now() + (86400 * 1000)
+          };
+          return match[1];
+        }
+      } else if (connectionString.includes('AuthType=Certificate')) {
+        // Certificate-based auth - use connection string as-is
+        this.tokenCache = {
+          token: connectionString,
+          expiresAt: Date.now() + (86400 * 1000)
+        };
+        return connectionString;
+      }
+
+      // Fallback: return connection string as token
+      this.tokenCache = {
+        token: connectionString,
+        expiresAt: Date.now() + (86400 * 1000)
+      };
+      return connectionString;
+    } catch (error) {
+      console.error('Failed to extract token from connection string:', error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Get token from Azure AD (OAuth 2.0)
+   * @returns {Promise<string>} Access token
+   */
+  async getTokenFromAzureAD() {
+    try {
       const response = await axios.post(
         `https://login.microsoftonline.com/${this.tenantId}/oauth2/v2.0/token`,
         new URLSearchParams({
@@ -50,8 +122,8 @@ class PowerAppsService {
 
       return response.data.access_token;
     } catch (error) {
-      console.error('Failed to get Power Apps access token:', error.response?.data || error.message);
-      throw new Error(`Power Apps authentication failed: ${error.message}`);
+      console.error('Failed to get Azure AD token:', error.response?.data || error.message);
+      throw new Error(`Azure AD authentication failed: ${error.message}`);
     }
   }
 

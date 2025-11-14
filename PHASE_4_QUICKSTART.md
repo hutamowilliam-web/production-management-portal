@@ -20,43 +20,47 @@ Your production management app now has **complete Power Apps integration** with:
 Copy-Item .env.template .env
 ```
 
-### Step 2: Register Azure App (10 minutes)
+### Step 2: Choose Authentication Method
+
+**Option A: Connection String (RECOMMENDED - No Azure needed)**
+
+1. Get connection string from Power Apps admin or:
+   - Power Apps Portal → Settings → Admin Center → Environments → Your Env → Details
+2. Add to `.env`:
+   ```env
+   POWER_APPS_CONNECTION_STRING=AuthType=OAuth;Url=https://orgc50eefba.crm4.dynamics.com;ClientId=YOUR_ID;ClientSecret=YOUR_SECRET
+   ```
+
+**Option B: API Key**
+
+1. Get API key from your organization
+2. Add to `.env`:
+   ```env
+   POWER_APPS_API_KEY=your_api_key_here
+   ```
+
+**Option C: Azure AD (Only if you're using Azure)**
 
 1. Go to **Azure Portal**: https://portal.azure.com
 2. Navigate to **Azure Active Directory** → **App registrations**
-3. Click **New registration**
-4. Fill in:
-   - **Name**: `Production Management Portal`
-   - **Supported account types**: `Accounts in this organizational directory`
-   - **Redirect URI**: Leave blank for now
-5. Click **Register**
+3. Create new registration and get CLIENT_ID and CLIENT_SECRET
+4. Add to `.env`:
+   ```env
+   POWER_APPS_CLIENT_ID=your_client_id
+   POWER_APPS_CLIENT_SECRET=your_client_secret
+   POWER_APPS_TENANT_ID=bd73b480-be67-4cc7-8034-b696715a2b99
+   ```
 
-### Step 3: Get Credentials (5 minutes)
+### Step 3: Set Instance URL (2 minutes)
 
-1. From your app registration, go to **Certificates & secrets**
-2. Click **New client secret**
-3. Set expiration to **24 months**
-4. Copy the secret value
-
-Now go back to **Overview** and copy:
-- **Client ID** (Application ID)
-
-### Step 4: Update .env File (3 minutes)
-
-Edit `.env` and add your credentials:
-
+Add to `.env`:
 ```env
-POWER_APPS_CLIENT_ID=paste_your_client_id_here
-POWER_APPS_CLIENT_SECRET=paste_your_secret_here
-
-# These are already set to your environment:
-POWER_APPS_TENANT_ID=bd73b480-be67-4cc7-8034-b696715a2b99
 POWER_APPS_INSTANCE_URL=https://orgc50eefba.crm4.dynamics.com
 POWER_APPS_ORGANIZATION_ID=0821ea5d-22b3-f011-8706-002248a15045
 POWER_APPS_ENVIRONMENT_ID=191e27b3-e1c2-e59a-a351-14238bd22a4f
 ```
 
-### Step 5: Test Connection (5 minutes)
+### Step 4: Verify Credentials (2 minutes)
 
 #### Option A: PowerShell (Windows)
 ```powershell
