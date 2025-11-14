@@ -85,11 +85,11 @@ export const PowerAppsPortal: React.FC<PowerAppsPortalProps> = ({
         style={{ height }}
       >
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-red-900 mb-2">Error Loading Power Apps</h3>
-          <p className="text-red-700 mb-4">{error}</p>
+          <h3 className="mb-2 text-lg font-semibold text-red-900">Error Loading Power Apps</h3>
+          <p className="mb-4 text-red-700">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+            className="px-4 py-2 text-white transition bg-red-600 rounded hover:bg-red-700"
           >
             Try Again
           </button>
@@ -104,7 +104,7 @@ export const PowerAppsPortal: React.FC<PowerAppsPortalProps> = ({
     return (
       <div className={`relative w-full ${className}`} style={{ height }}>
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-white">
             <LoadingSpinner />
           </div>
         )}
@@ -127,7 +127,7 @@ export const PowerAppsPortal: React.FC<PowerAppsPortalProps> = ({
         style={{ height }}
       >
         <div className="text-center">
-          <h3 className="text-lg font-semibold text-yellow-900 mb-2">
+          <h3 className="mb-2 text-lg font-semibold text-yellow-900">
             Power Apps Configuration Error
           </h3>
           <p className="text-yellow-700">{errorMessage}</p>
@@ -213,7 +213,7 @@ export const PowerAppsStatus: React.FC<PowerAppsStatusProps> = ({ onHealthCheck 
         <button
           onClick={checkHealth}
           disabled={status === 'checking'}
-          className="px-3 py-1 text-sm font-medium rounded opacity-75 hover:opacity-100 disabled:opacity-50 transition"
+          className="px-3 py-1 text-sm font-medium transition rounded opacity-75 hover:opacity-100 disabled:opacity-50"
         >
           Refresh
         </button>
@@ -318,7 +318,7 @@ export const PowerAppsSyncButton: React.FC<PowerAppsSyncButtonProps> = ({
       <button
         onClick={handleSync}
         disabled={isSyncing}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-400 transition font-medium"
+        className="px-4 py-2 font-medium text-white transition bg-blue-600 rounded hover:bg-blue-700 disabled:bg-blue-400"
       >
         {isSyncing ? 'Syncing...' : buttonLabels[syncType]}
       </button>

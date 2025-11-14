@@ -20,6 +20,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const reportRoutes = require('./routes/reports');
 const notificationRoutes = require('./routes/notifications');
 const powerAppsRoutes = require('./routes/powerApps');
+const analyticsRoutes = require('./routes/analytics');
 
 const { authenticateToken } = require('./middleware/auth');
 const { errorHandler } = require('./middleware/errorHandler');
@@ -84,6 +85,7 @@ app.use('/api/dashboard', authenticateToken, dashboardRoutes);
 app.use('/api/reports', authenticateToken, reportRoutes);
 app.use('/api/notifications', authenticateToken, notificationRoutes);
 app.use('/api/power-apps', powerAppsRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
